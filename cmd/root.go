@@ -9,6 +9,7 @@ import (
 
 var dir string
 var endpoint string
+var version string = "0.0.1"
 
 var rootCmd = &cobra.Command{
 	Use:   "wgconf",
@@ -19,15 +20,24 @@ var rootCmd = &cobra.Command{
 	},
 }
 
+var versionCmd = &cobra.Command{
+	Use:   "version",
+	Short: "Print current version and exit",
+	Long:  `Print current version and exit`,
+	Run: func(cmd *cobra.Command, args []string) {
+		fmt.Printf("wggen version: %s\n", version)
+	},
+}
+
 func init() {
 	rootCmd.PersistentFlags().StringVarP(&dir, "path", "P", "wg-config", "Directory of the config files")
 	rootCmd.PersistentFlags().StringVarP(&endpoint, "endpoint", "e", "", "IP or DNS name for the server instance")
+	rootCmd.AddCommand(versionCmd)
 	rootCmd.AddCommand(cmdServer)
 	rootCmd.AddCommand(cmdPeer)
 	rootCmd.AddCommand(cmdConfig)
 
 	rootCmd.MarkPersistentFlagRequired("endpoint")
-
 }
 
 func Execute() error {
