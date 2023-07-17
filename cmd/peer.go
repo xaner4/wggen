@@ -2,7 +2,6 @@ package cmd
 
 import (
 	"fmt"
-	"log"
 	"strings"
 
 	"github.com/spf13/cobra"
@@ -53,27 +52,20 @@ func init() {
 
 }
 
-func listPeers() error {
-	wgcfg, err := wggen.GetWGConfig(dir, endpoint)
-	if err != nil {
-		return err
-	}
-
-	if len(wgcfg.Peers) == 0 {
+func listPeers() {
+	if len(srv.Peers) == 0 {
 		fmt.Println("No peers found")
-		return nil
 	}
 
 	fmt.Printf("Peers for %s:\n", endpoint)
 	fmt.Println("Name\t\tIP\t\t\t\t\tAllowedIPs")
 	fmt.Println("------------------------------------------------------------------------------------------------------------------------------------------------")
-	for _, wg := range wgcfg.Peers {
+	for _, wg := range srv.Peers {
 		fmt.Printf("%s\t\t%s\t\t\t%s \n", wg.Name, wg.IPAddress, wg.AllowedIPs)
 	}
-	return nil
 }
 
-func addPeer() error {
+func addPeer() {
 	aip := strings.Split(allowedIPs, ",")
 	dns := strings.Split(DNS, ",")
 
@@ -84,20 +76,19 @@ func addPeer() error {
 
 	peer, err := srv.GenPeerConf(peername, aip, dns, PresharedKeys, PersistentKeepalives)
 	if err != nil {
-		log.Fatal(err)
+		fmt.Println(err)
 	}
 	srv.Peers = append(srv.Peers, peer)
 	err = srv.UpdateWGConfig(dir)
 	if err != nil {
-		log.Fatal(err)
+		fmt.Println(err)
 	}
 	fmt.Printf("Peer \"%s\" has been added successfully\n", peername)
-	return nil
 }
 
-func delPeer() error {
+func delPeer() {
 	if len(srv.Peers) == 0 {
-		return fmt.Errorf("no peer found")
+		fmt.Printf("no peer found")
 	}
 
 	// Find the index of the peer with the given name
@@ -110,7 +101,7 @@ func delPeer() error {
 	}
 
 	if index == -1 {
-		return fmt.Errorf("no such peer")
+		fmt.Printf("no such peer")
 	}
 
 	// Swap the peer to delete with the last peer in the slice
@@ -119,8 +110,7 @@ func delPeer() error {
 
 	err := srv.UpdateWGConfig(dir)
 	if err != nil {
-		return fmt.Errorf("failed to save server config: %w", err)
+		fmt.Printf("failed to save server config: %s \n", err)
 	}
 	fmt.Printf("Peer %s has been deleted\n", peername)
-	return nil
 }

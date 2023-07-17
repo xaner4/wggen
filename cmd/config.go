@@ -1,6 +1,8 @@
 package cmd
 
 import (
+	"fmt"
+
 	"github.com/spf13/cobra"
 )
 
@@ -41,9 +43,17 @@ func init() {
 }
 
 func cfgPeer() {
-	_ = srv.GeneratePeerConfig(cfgname)
+	cfg, err := srv.GeneratePeerConfig(cfgname)
+	if err != nil {
+		fmt.Printf("Error generating peer config: %v\n", err)
+	}
+	fmt.Println(cfg)
 }
 
 func cfgSrv() {
-	_ = srv.GenerateSrvConfig()
+	cfg, err := srv.GenerateSrvConfig()
+	if err != nil {
+		fmt.Printf("Error generating server config: %v\n", err)
+	}
+	fmt.Println(cfg)
 }

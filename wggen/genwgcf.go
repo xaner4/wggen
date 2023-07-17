@@ -25,13 +25,13 @@ func renderTemplate(tmplStr string, data interface{}) (string, error) {
 	return sb.String(), nil
 }
 
-func (wg *WGSrv) GeneratePeerConfig(name string) error {
+func (wg *WGSrv) GeneratePeerConfig(name string) (wgcfg string, err error) {
 	wgsrv := *wg
 	wgsrv.Peers = nil
 	// Read the template files
 	peerTmpl, err := templateFiles.ReadFile("templates/peer.tmpl")
 	if err != nil {
-		return fmt.Errorf("failed to read peer.tmpl: %w", err)
+		return "", fmt.Errorf("failed to read peer.tmpl: %w", err)
 	}
 
 	for _, p := range wg.Peers {
@@ -40,29 +40,25 @@ func (wg *WGSrv) GeneratePeerConfig(name string) error {
 		}
 		wgsrv.Peers = append(wgsrv.Peers, p)
 	}
-	wgcfg, err := renderTemplate(string(peerTmpl), wgsrv)
+	wgcfg, err = renderTemplate(string(peerTmpl), wgsrv)
 	if err != nil {
-		return fmt.Errorf("failed to render peer: %w", err)
+		return "", fmt.Errorf("failed to render peer: %w", err)
 	}
-	fmt.Println()
-	fmt.Println(wgcfg)
-	fmt.Println()
-	return nil
+
+	return wgcfg, nil
 }
 
-func (wg *WGSrv) GenerateSrvConfig() error {
+func (wg *WGSrv) GenerateSrvConfig() (wgcfg string, err error) {
 	// Read the template files
 	peerTmpl, err := templateFiles.ReadFile("templates/server.tmpl")
 	if err != nil {
-		return fmt.Errorf("failed to read server.tmpl: %w", err)
+		return "", fmt.Errorf("failed to read server.tmpl: %w", err)
 	}
 
-	wgcfg, err := renderTemplate(string(peerTmpl), wg)
+	wgcfg, err = renderTemplate(string(peerTmpl), wg)
 	if err != nil {
-		return fmt.Errorf("failed to render Server: %w", err)
+		return "", fmt.Errorf("failed to render Server: %w", err)
 	}
-	fmt.Println()
-	fmt.Println(wgcfg)
-	fmt.Println()
-	return nil
+
+	return wgcfg, nil
 }
