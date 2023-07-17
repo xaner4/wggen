@@ -1,0 +1,13 @@
+[Interface]
+# Name = {{ .Name }}
+Address = {{ range $i,$v := .IPAddress }}{{if $i}}, {{end}}{{ . }}{{ end }}
+PrivateKey = {{ .PrivateKey }}
+ListenPort = {{ .ListenPort }}
+
+{{ range .Peers }}
+[Peer]
+# Name = {{ .Name }}
+PublicKey = {{ .PublicKey }}
+PresharedKey = {{ .PresharedKey }}
+AllowedIPs = {{ range $i,$v := .AllowedIPs }}{{if $i}}, {{end}}{{ . }}{{ end }}
+{{ end }}

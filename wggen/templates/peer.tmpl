@@ -1,0 +1,13 @@
+[Interface]
+# Name = {{ range .Peers }}{{ .Name }}{{ end }}
+Address = {{ range .Peers }}{{ range $i,$v := .IPAddress }}{{if $i}}, {{end}}{{ . }}{{ end }}{{ end }}
+PrivateKey = {{ range .Peers }}{{ .PrivateKey }}{{ end }}
+DNS = {{ range .Peers }}{{ range $i,$v := .DNS }}{{if $i}}, {{ end }}{{ . }}{{end}}{{ end }}
+
+[Peer]
+# Name = {{ .Name }}
+PublicKey = {{ .PublicKey }}
+PresharedKey = {{ range .Peers }}{{ .PresharedKey }}{{ end }}
+AllowedIPs = {{ range .Peers }}{{ range $i,$v := .AllowedIPs }}{{if $i}}, {{end}}{{ . }}{{ end }}{{ end }}
+Endpoint =  {{ .Endpoint }}:{{ .ListenPort}}
+PersistentKeepAlive = {{ range .Peers }}{{ .PersistentKeepalive }}{{ end }}
