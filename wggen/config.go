@@ -9,6 +9,8 @@ import (
 	"gopkg.in/yaml.v3"
 )
 
+var cfgFileName string
+
 func GetAllWGConfigFiles(dir string) ([]string, error) {
 	if dir == "" {
 		return nil, fmt.Errorf("dir cannot be empty")
@@ -37,9 +39,8 @@ func GetAllWGConfigFiles(dir string) ([]string, error) {
 }
 
 func GetWGConfig(dir, endpoint string) (*WGSrv, error) {
-	cfgFiles, err := GetAllWGConfigFiles(dir)
-	var cfg string
 
+	cfgFiles, err := GetAllWGConfigFiles(dir)
 	if err != nil {
 		return nil, err
 	}
@@ -49,16 +50,17 @@ func GetWGConfig(dir, endpoint string) (*WGSrv, error) {
 
 	for _, cfgFile := range cfgFiles {
 		if strings.Contains(cfgFile, endpoint) {
-			cfg = cfgFile
+			cfgFileName = cfgFile
+			break
 		}
 	}
 
-	if cfg == "" {
+	if cfgFileName == "" {
 		return nil, fmt.Errorf("no config file found in %s with endpoint %s", dir, endpoint)
 	}
 
 	path, err := filepath.Abs(dir)
-	cfgfile := filepath.Join(path, cfg)
+	cfgfile := filepath.Join(path, cfgFileName)
 	if err != nil {
 		return nil, err
 	}
@@ -85,13 +87,12 @@ func (wg *WGSrv) SaveWGConfig(dir string) error {
 	}
 
 	// Generate the filename based on the endpoint
-	filename := fmt.Sprintf("%s.yaml", wg.Endpoint)
 	fullpath, _ := filepath.Abs(dir)
-	filepath := filepath.Join(fullpath, filename)
+	filepath := filepath.Join(fullpath, cfgFileName)
 
 	// Check if the file already exists
 	if _, err := os.Stat(filepath); err == nil {
-		return fmt.Errorf("%s does already exist", filename)
+		return fmt.Errorf("%s does already exist", cfgFileName)
 	}
 
 	// Convert server struct to YAML
@@ -112,9 +113,9 @@ func (wg *WGSrv) SaveWGConfig(dir string) error {
 func (wg *WGSrv) UpdateWGConfig(dir string) error {
 
 	// Generate the filename based on the endpoint
-	filename := fmt.Sprintf("%s.yaml", wg.Endpoint)
+
 	fullpath, _ := filepath.Abs(dir)
-	filepath := filepath.Join(fullpath, filename)
+	filepath := filepath.Join(fullpath, cfgFileName)
 
 	_, err := os.Stat(filepath)
 	if err != nil {
