@@ -1,7 +1,9 @@
 package cmd
 
 import (
+	"fmt"
 	"log"
+	"os"
 	"strings"
 
 	"github.com/spf13/cobra"
@@ -33,12 +35,14 @@ func servers() {
 
 	srv, err := wggen.GenServerConf(srvname, endpoint, port, subnetList)
 	if err != nil {
-		log.Fatal("Something went wrong with generating server config")
+		fmt.Printf("Something went wrong with generating server config\nError: %v\n", err)
+		os.Exit(1)
 	}
 
 	err = srv.SaveWGConfig(dir)
 	if err != nil {
-		log.Fatal(err)
+		fmt.Printf("Something went wrong with saving the server config\nError: %v\n", err)
+		os.Exit(1)
 	}
 
 	log.Printf("Server %s was succesfully generated and saved to %s\n", endpoint, dir)

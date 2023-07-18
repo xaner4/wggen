@@ -2,6 +2,7 @@ package cmd
 
 import (
 	"fmt"
+	"os"
 	"strings"
 
 	"github.com/spf13/cobra"
@@ -55,6 +56,7 @@ func init() {
 func listPeers() {
 	if len(srv.Peers) == 0 {
 		fmt.Println("No peers found")
+		return
 	}
 
 	fmt.Printf("Peers for %s:\n", endpoint)
@@ -76,19 +78,22 @@ func addPeer() {
 
 	peer, err := srv.GenPeerConf(peername, aip, dns, PresharedKeys, PersistentKeepalives)
 	if err != nil {
-		fmt.Println(err)
+		fmt.Printf("Error generating peer %v\nError: %v\n", peername, err)
+		os.Exit(1)
 	}
 	srv.Peers = append(srv.Peers, peer)
 	err = srv.UpdateWGConfig(dir)
 	if err != nil {
-		fmt.Println(err)
+		fmt.Printf("Error adding peer %v to %v\nError: %v\n", peername, endpoint, err)
+		os.Exit(1)
 	}
-	fmt.Printf("Peer \"%s\" has been added successfully\n", peername)
+	fmt.Printf("Peer \"%s\" has been added successfully to %v\n", endpoint, peername)
 }
 
 func delPeer() {
 	if len(srv.Peers) == 0 {
 		fmt.Printf("no peer found")
+		return
 	}
 
 	// Find the index of the peer with the given name
@@ -102,6 +107,7 @@ func delPeer() {
 
 	if index == -1 {
 		fmt.Printf("no such peer")
+		return
 	}
 
 	// Swap the peer to delete with the last peer in the slice
@@ -110,7 +116,7 @@ func delPeer() {
 
 	err := srv.UpdateWGConfig(dir)
 	if err != nil {
-		fmt.Printf("failed to save server config: %s \n", err)
+		fmt.Printf("failed to save server config\nError: %v\n", err)
 	}
 	fmt.Printf("Peer %s has been deleted\n", peername)
 }
