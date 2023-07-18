@@ -27,6 +27,10 @@ var versionCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		fmt.Printf("wggen version: %s\n", version)
 	},
+	PreRun: func(cmd *cobra.Command, args []string) {
+		flags := cmd.InheritedFlags()
+		flags.SetAnnotation("endpoint", cobra.BashCompOneRequiredFlag, []string{"false"})
+	},
 }
 
 func init() {
