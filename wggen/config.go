@@ -88,7 +88,7 @@ func (wg *WGSrv) SaveWGConfig(dir string) error {
 
 	// Generate the filename based on the endpoint
 	fullpath, _ := filepath.Abs(dir)
-	filepath := filepath.Join(fullpath, cfgFileName)
+	filepath := filepath.Join(fullpath, wg.Endpoint)
 
 	// Check if the file already exists
 	if _, err := os.Stat(filepath); err == nil {
