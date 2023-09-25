@@ -2,6 +2,7 @@ package cmd
 
 import (
 	"fmt"
+	"os"
 
 	"github.com/spf13/cobra"
 	"github.com/xaner4/wggen/wggen"
@@ -12,9 +13,9 @@ var endpoint string
 var version string = "0.0.1"
 
 var rootCmd = &cobra.Command{
-	Use:   "wgconf",
+	Use:   "wggen",
 	Short: "Easy Wireguard Configuration generation",
-	Long:  `wgconf is a tool for generating Wireguard Configuration and keeping track of key pairs in one place`,
+	Long:  `wggen is a tool for generating Wireguard Configuration and keeping track of key pairs in one place`,
 	Run: func(cmd *cobra.Command, args []string) {
 		cmd.Help()
 	},
@@ -53,5 +54,6 @@ func warmUp() {
 	srv, err = wggen.GetWGConfig(dir, endpoint)
 	if err != nil {
 		fmt.Println(err)
+		os.Exit(1)
 	}
 }
