@@ -87,12 +87,13 @@ func (wg *WGSrv) SaveWGConfig(dir string) error {
 	}
 
 	// Generate the filename based on the endpoint
+	filename := fmt.Sprintf("%s.yaml", wg.Endpoint)
 	fullpath, _ := filepath.Abs(dir)
-	filepath := filepath.Join(fullpath, wg.Endpoint)
+	filepath := filepath.Join(fullpath, filename)
 
 	// Check if the file already exists
 	if _, err := os.Stat(filepath); err == nil {
-		return fmt.Errorf("%s does already exist", cfgFileName)
+		return fmt.Errorf("%s does already exist", filename)
 	}
 
 	// Convert server struct to YAML
