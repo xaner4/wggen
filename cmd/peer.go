@@ -87,7 +87,7 @@ func addPeer() {
 		fmt.Printf("Error adding peer %v to %v\nError: %v\n", peername, endpoint, err)
 		os.Exit(1)
 	}
-	fmt.Printf("Peer \"%s\" has been added successfully to %v\n", endpoint, peername)
+	fmt.Printf("Peer \"%s\" has been added successfully to %v\n", peername, endpoint)
 }
 
 func delPeer() {
