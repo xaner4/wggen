@@ -10,7 +10,7 @@ import (
 
 var dir string
 var endpoint string
-var version string = "0.0.1"
+var version string = "0.0.2"
 
 var rootCmd = &cobra.Command{
 	Use:   "wggen",

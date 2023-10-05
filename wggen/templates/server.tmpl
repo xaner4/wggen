@@ -9,5 +9,5 @@ ListenPort = {{ .ListenPort }}
 # Name = {{ .Name }}
 PublicKey = {{ .PublicKey }}
 PresharedKey = {{ .PresharedKey }}
-AllowedIPs = {{ range $i,$v := .AllowedIPs }}{{if $i}}, {{end}}{{ . }}{{ end }}
+AllowedIPs = {{ range $i,$v := .IPAddress }}{{if $i}}, {{end}}{{ . }}{{ end }}
 {{ end }}
