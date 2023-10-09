@@ -10,7 +10,13 @@ import (
 
 var dir string
 var endpoint string
-var version string = "0.0.2"
+var version string
+var buildDate string
+var goVersion string
+var operatingSystem string
+var arch string
+var gitBranch string
+var gitRevision string
 
 var rootCmd = &cobra.Command{
 	Use:   "wggen",
@@ -26,7 +32,11 @@ var versionCmd = &cobra.Command{
 	Short: "Print current version and exit",
 	Long:  `Print current version and exit`,
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Printf("wggen version: %s\n", version)
+		fmt.Printf("Version: %s\n", version)
+		fmt.Printf("Build Date: %s\n", buildDate)
+		fmt.Printf("Go Version: %s\n", goVersion)
+		fmt.Printf("Platform: %s/%s\n", operatingSystem, arch)
+		fmt.Printf("Branch: %s, Revision: %s \n", gitBranch, gitRevision)
 	},
 	PreRun: func(cmd *cobra.Command, args []string) {
 		flags := cmd.InheritedFlags()
