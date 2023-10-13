@@ -35,6 +35,6 @@ jobs:
       with:
         repo_token: ${{ secrets.GITHUB_TOKEN }}
         file: build/wggen*
-        tag: ${{ github.ref_name }}
+        tag: ${{ github.ref }}
         overwrite: true
         file_glob: true
