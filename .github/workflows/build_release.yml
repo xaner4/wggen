@@ -27,7 +27,7 @@ jobs:
 
     - name: PATH
       run: |
-        ls -R;
+        ls -lahR;
         pwd;
 
     - name: release
