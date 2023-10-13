@@ -12,7 +12,6 @@ on:
     - 'v*'
 
 jobs:
-
   build:
     runs-on: ubuntu-latest
     steps:
@@ -28,16 +27,11 @@ jobs:
       env:
         VERSION_NUM: ${{ github.ref_name }}
 
-    - name: PATH
-      run: |
-        ls -lahR;
-        pwd;
-
     - name: release
       uses: svenstaro/upload-release-action@v2
       with:
         repo_token: ${{ secrets.GITHUB_TOKEN }}
         file: build/wggen*
-        tag: ${{ github.ref }}
+        tag: ${{ github.ref_name }}
         overwrite: true
         file_glob: true
