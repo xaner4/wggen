@@ -6,7 +6,7 @@ OUTPUT_DIR := ./build
 
 # Binary name
 BINARY_NAME := wggen
-VERSION := 0.0.3
+VERSION := ${VERSION_NUM}
 DATE := $$(date +'%F %T %Z')
 GOVERSION := $$(go version | cut -d' ' -f3)
 GITBRANCH := $$(git branch | cut -d' ' -f2)
