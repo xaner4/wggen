@@ -53,11 +53,10 @@ func init() {
 	rootCmd.PersistentFlags().StringVarP(&dir, "path", "P", "wg-config", "Directory of the config files")
 	rootCmd.PersistentFlags().StringVarP(&endpoint, "endpoint", "e", "", "IP or DNS name for the server instance")
 	rootCmd.AddCommand(versionCmd)
-	rootCmd.AddCommand(cmdServer)
+	rootCmd.AddCommand(cmdInit)
 	rootCmd.AddCommand(cmdPeer)
 	rootCmd.AddCommand(cmdConfig)
 
-	rootCmd.MarkPersistentFlagRequired("endpoint")
 }
 
 func Execute() error {
